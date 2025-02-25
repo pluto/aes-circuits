@@ -52,17 +52,17 @@ template GCTR(INPUT_LEN) {
     plainTextBlocks.stream <== plainText;
 
     // Step 1: Generate counter blocks
-    signal CounterBlocks[nBlocks][4][4];
+    signal CounterBlocks[nBlocks + 1][4][4];
     CounterBlocks[0] <== initialCounterBlock;
 
     // First counter block is passed in, as a combination of the IV right padded with zeros IV is 96 bits or 12 bytes
     // The next counter needs to be set by incrementing the right most 32 bits (4 bytes) of the previous counter block
     //
     // component to increment the last word of the counter block
-    component inc32[nBlocks - 1];
+    component inc32[nBlocks];
     // For i = 2 to nBlocks, let CBi = inc32(CBi-1).
 
-    for (var i = 1; i < nBlocks; i++) {
+    for (var i = 1; i < nBlocks + 1; i++) {
         inc32[i - 1] = IncrementWord();
         inc32[i - 1].in <== CounterBlocks[i - 1][3];
 
@@ -103,7 +103,7 @@ template GCTR(INPUT_LEN) {
     // encrypt the last counter block 
     aes[nBlocks] = Cipher();
     aes[nBlocks].key <== key;
-    aes[nBlocks].block <== CounterBlocks[nBlocks-1];
+    aes[nBlocks].block <== CounterBlocks[nBlocks];
     component aesCipherToStream = ToStream(1, 16);
     aesCipherToStream.blocks[0] <== aes[nBlocks].cipher;
 

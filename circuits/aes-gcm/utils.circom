@@ -112,7 +112,6 @@ template BitwiseRightShift(n, r) {
     }
 }
 
-
 template BitwiseXor(n) {
     signal input a[n];
     signal input b[n];
@@ -135,26 +134,7 @@ template BitwiseOr(n) {
     }
 }
 
-// compute the OR of n inputs, each m bits wide
-template OrMultiple(n, m) {
-    signal input inputs[n][m];
-    signal output out[m];
-
-    signal mids[n][m];
-    mids[0] <== inputs[0];
-
-    component ors[n-1];
-    for(var i=0; i<n-1; i++) {
-        ors[i] = BitwiseOr(m);
-        ors[i].a <== mids[i];
-        ors[i].b <== inputs[i+1];
-        mids[i+1] <== ors[i].out;
-    }
-
-    out <== mids[n-1];
-}
-
-// compute the XOR of n inputs, each m bits wide
+// compute the XOR of n inputs, each of m bytes
 template XorMultiple(n, m) {
     signal input inputs[n][m];
     signal output out[m];
@@ -164,10 +144,10 @@ template XorMultiple(n, m) {
 
     component xors[n-1];
     for(var i=0; i<n-1; i++) {
-        xors[i] = BitwiseXor(m);
-        xors[i].a <== mids[i];
-        xors[i].b <== inputs[i+1];
-        mids[i+1] <== xors[i].out;
+         xors[i] = XORBLOCK(m);
+         xors[i].a <== mids[i];
+         xors[i].b <== inputs[i+1];
+         mids[i+1] <== xors[i].out;
     }
 
     out <== mids[n-1];

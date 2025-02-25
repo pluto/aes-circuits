@@ -67,6 +67,27 @@ describe("aes-gcm", () => {
     assert.deepEqual(witness.cipherText, hexBytesToBigInt(ct))
     // assert.deepEqual(witness.authTag, hexBytesToBigInt(auth_tag));
   });
+
+  it("should work in case of non-integer multiples of block size", async () => {
+    let circuit_one_block: WitnessTester<["key", "iv", "plainText", "aad"], ["cipherText", "tag"]>;
+    circuit_one_block = await circomkit.WitnessTester(`aes-gcm`, {
+      file: "aes-gcm/aes-gcm",
+      template: "AESGCM",
+      params: [30],
+    });
+
+    const key = hexToBytes('31313131313131313131313131313131');
+    const iv = hexToBytes('313131313131313131313131');
+    const msg = hexToBytes('7465737468656c6c6f776f726c64307465737468656c6c6f776f726c6431');
+    const aad = hexToBytes('00000000000000000000000000000000')
+    const ct = hexToBytes('2929d2bb1ae94804406cd135325933123763622c7c374c0542ae9198a16f');
+    const auth_tag = hexToBytes('31837b1974685501be791364a586fa6e');
+
+    const witness = await circuit_one_block.compute({ key: key, iv: iv, plainText: msg, aad: aad }, ["cipherText", "authTag"])
+
+    assert.deepEqual(witness.cipherText, hexBytesToBigInt(ct))
+    // assert.deepEqual(witness.authTag, hexBytesToBigInt(auth_tag));
+  });
 });
 
 // signal input key[16]; // 128-bit key
