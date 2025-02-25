@@ -98,38 +98,6 @@ mod tests {
         println!("ct={}", hex::encode(ct));
     }
 
-    // AES GCM multiple blocks of data
-    // cargo test test_aes_gcm_10_blocks -- --show-output
-    #[tokio::test]
-    async fn test_aes_gcm_10_blocks1() {
-        use aes_gcm::{
-            aead::{generic_array::GenericArray, Aead, NewAead, Payload},
-            Aes128Gcm,
-        };
-
-        let test_key = [
-            0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31,
-            0x31, 0x31,
-        ];
-        let test_iv = [0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31];
-
-        let mut payload: Vec<u8> = Vec::new();
-        for last_byte in 0..10 {
-            let message = format!("testhello000000{}", last_byte);
-            payload.extend(message.as_bytes());
-        }
-        let aes_payload = Payload { msg: &payload, aad: &[] };
-
-        let cipher = Aes128Gcm::new_from_slice(&test_key).unwrap();
-        let nonce = GenericArray::from_slice(&test_iv);
-        let ct = cipher.encrypt(nonce, aes_payload).expect("error generating ct");
-
-        println!("key={}", hex::encode(test_key));
-        println!("iv={}", hex::encode(test_iv));
-        println!("msg={}", hex::encode(payload));
-        println!("ct={}", hex::encode(ct));
-    }
-
     /// Test AES-GCM with data length not a multiple of block size
     #[tokio::test]
     async fn test_aes_gcm_non_multiple_length() {
