@@ -14,6 +14,12 @@
   </a>
 </div>
 
+> [!WARNING]
+> ⚠️ Repository No Longer Maintained ⚠️
+>
+> This repository has been archived and is no longer maintained.
+All development has moved to the [noir-web-prover-circuits](github.com/pluto/noir-web-prover-circuits) repository under the Pluto organization.
+
 ## Overview
 
 This repository contains an implementation of [AES-GCM](https://nvlpubs.nist.gov/nistpubs/legacy/sp/nistspecialpublication800-38d.pdf) in Circom. We have used circomkit to generate and test witnesses in the test files. We have also used to related rust code in the `src` generate test vectors from official cryptography libraries. The Circuits and circomkit tests are in the `circuits` directory.
