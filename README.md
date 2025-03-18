@@ -16,9 +16,9 @@
 
 > [!WARNING]
 > ⚠️ Repository No Longer Maintained ⚠️
->
+>https://github.com/pluto/noir-web-prover-circuits
 > This repository has been archived and is no longer maintained.
-All development has moved to the [noir-web-prover-circuits](github.com/pluto/noir-web-prover-circuits) repository under the Pluto organization.
+All development has moved to the [noir-web-prover-circuits](https://github.com/pluto/noir-web-prover-circuits) repository under the Pluto organization.
 
 ## Overview
 
